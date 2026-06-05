@@ -7,7 +7,7 @@ description: Use when the agent needs to inspect known chat threads, inspect rec
 
 Use this skill to work with chats through the local chat adapter host.
 
-Do not use this skill to deliver the normal reply to the current incoming message. The chat host sends the final assistant response automatically. For ordinary replies, answer normally in the final assistant message.
+Do not use this skill to deliver the normal reply, generated images, or generated files for the current incoming message. The chat host sends the final assistant response and reply attachments automatically. For ordinary replies, answer normally in the final assistant message and let the host deliver the text and attachments.
 
 The skill talks to the agent's local control server. Use `agent-chat` in deployed chat-host containers; it loads the required local control environment. Do not call `chat.ts` directly unless debugging.
 
@@ -73,9 +73,11 @@ The command returns a local file path. Inspect downloaded files with normal shel
 
 ## Send To A Thread
 
-Use `send` for proactive messages, scheduled messages, messages to another known chat, or files that must be attached to a chat.
+Use `send` for proactive messages, scheduled messages, messages to another known chat, or explicitly out-of-band files that must be attached to a chat.
 
-When sending files to the active conversation, use the current turn's `Thread id`.
+Do not use `send` for generated images or files that belong to the normal answer for the current incoming message; returning them from the current turn is enough, and sending them manually can duplicate attachments in Telegram.
+
+When sending out-of-band files to the active conversation, use the current turn's `Thread id`.
 
 Do not use `send` for a plain text answer to the current incoming message.
 
